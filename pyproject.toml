@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "deep-pixel-restoration"
+version = "0.0.1"
+description = "Deep pixel restoration project to increase the quality of image"
+authors = ["Artem Agarkov <agarkov.as@phystech.edu>"]
+maintainers = ["Artem Agarkov <agarkov.as@phystech.edu>"]
+readme = "README.md"
+repository = "https://github.com/agarkovv/pixel-rest"
+keywords = ["computer vision", "deep learning", "deep pixel restoration"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "~3.11"
+pandas = "^2.2.1"
+torch = "^2.2.2"
+torchvision = "^0.17.2"
+tqdm = "^4.66.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
