@@ -9,6 +9,9 @@ __pycache__/
 # Datasets
 data/
 
+# VS-Code
+.DS_Store
+
 # Distribution / packaging
 .Python
 build/
