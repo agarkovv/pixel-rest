@@ -2,7 +2,8 @@
 
 ## Структура проекта:
 
-![struct.png](pics/struct.png)
+<img src="pics/struct.png" width="200" height="300"/>
+
 
 - Директория epochs содержит чекпоинты модели
 - Директория pixel_rest_src содержит source файлы
