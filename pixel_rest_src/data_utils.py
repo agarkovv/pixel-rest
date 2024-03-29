@@ -4,12 +4,12 @@ from os.path import join
 from PIL import Image
 from torch.utils.data.dataset import Dataset
 from torchvision.transforms import (
+    CenterCrop,
     Compose,
     RandomCrop,
-    ToTensor,
-    ToPILImage,
-    CenterCrop,
     Resize,
+    ToPILImage,
+    ToTensor,
 )
 
 

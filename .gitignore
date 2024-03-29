@@ -11,6 +11,7 @@ data/
 
 # VS-Code
 .DS_Store
+.vscode
 
 # Distribution / packaging
 .Python

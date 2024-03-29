@@ -3,17 +3,16 @@ import os
 from math import log10
 
 import pandas as pd
+import pytorch_ssim
 import torch.optim as optim
 import torch.utils.data
 import torchvision.utils as utils
+from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
+from loss import GeneratorLoss
+from model import Discriminator, Generator
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
-import pytorch_ssim
-from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
-from loss import GeneratorLoss
-from model import Generator, Discriminator
 
 parser = argparse.ArgumentParser(description="Train Super Resolution Models")
 parser.add_argument(

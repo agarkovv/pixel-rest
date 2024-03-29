@@ -2,13 +2,12 @@ import argparse
 import os
 from math import log10
 
+import pytorch_ssim
 import torch.utils.data
 import torchvision.utils as utils
+from data_utils import ValDatasetFromFolder, display_transform
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
-import pytorch_ssim
-from data_utils import ValDatasetFromFolder, display_transform
 
 parser = argparse.ArgumentParser(description="Train Super Resolution Models")
 parser.add_argument(
