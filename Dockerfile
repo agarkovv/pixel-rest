@@ -4,11 +4,12 @@ ARG UBUNTU_VERSION=22.04
 FROM $BASE_CONTAINER:$UBUNTU_VERSION
 
 ARG PYTHON_VERSION=3.11
-ARG CONDA_ENV=girafe-ai
+ARG CONDA_ENV=pixel-rest
 
 LABEL version="0.0.1"
 
-WORKDIR /workspace
+ENV WORKDIR=/workspace/pixel-rest
+WORKDIR $WORKDIR
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -60,15 +61,13 @@ RUN ln -s ${CONDA_PATH}/etc/profile.d/conda.sh /etc/profile.d/conda.sh \
 
 SHELL ["/bin/bash", "--login", "-c"]
 
-# kernels autodiscover
-# TODO create conda env, install kernel exploration tool, nbextensions?
-RUN conda install -n base notebook nb_conda_kernels
+# Mount dataset, not copy. TODO: add cloud mounting
+ADD data $WORKDIR/data
 
-RUN conda create -n $CONDA_ENV python=$PYTHON_VERSION \
-    && conda run -n $CONDA_ENV pip install ipykernel
+# Copy project to the docker, excluding data dir
+COPY . $WORKDIR
 
-# Install project dependencies
-COPY pyproject.toml poetry.lock ./
-RUN conda run -n $CONDA_ENV poetry install
-
-# CMD conda run -n base jupyter notebook --ip 0.0.0.0 --allow-root --no-browser
+# Create venv and install project dependencies
+RUN cd $WORKDIR \
+    && conda create -n $CONDA_ENV python=$PYTHON_VERSION \
+    && conda run -n $CONDA_ENV poetry install
