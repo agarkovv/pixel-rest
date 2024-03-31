@@ -3,16 +3,22 @@ import os
 from math import log10
 
 import pandas as pd
-import pytorch_ssim
 import torch.optim as optim
 import torch.utils.data
 import torchvision.utils as utils
-from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
-from loss import GeneratorLoss
-from model import Discriminator, Generator
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+
+from pixel_rest_src import pytorch_ssim
+from pixel_rest_src.data_utils import (
+    TrainDatasetFromFolder,
+    ValDatasetFromFolder,
+    display_transform,
+)
+from pixel_rest_src.loss import GeneratorLoss
+from pixel_rest_src.model import Discriminator, Generator
+
 
 parser = argparse.ArgumentParser(description="Train Super Resolution Models")
 parser.add_argument(
@@ -109,7 +115,7 @@ if __name__ == "__main__":
             # (2) Update G network: minimize 1-D(G(z)) + Perception Loss + Image Loss + TV Loss
             ###########################
             netG.zero_grad()
-            ## The two lines below are added to prevent runetime error in Google Colab ##
+            # The two lines below are added to prevent runetime error in Google Colab ##
             fake_img = netG(z)
             fake_out = netD(fake_img).mean()
             ##
