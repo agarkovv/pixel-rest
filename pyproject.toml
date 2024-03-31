@@ -12,9 +12,29 @@ license = "Apache-2.0"
 [tool.poetry.dependencies]
 python = "~3.11"
 pandas = "^2.2.1"
+pre-commit = "^3.6.0"
 torch = "^2.2.2"
 torchvision = "^0.17.2"
 tqdm = "^4.66.2"
+
+[tool.isort]
+src_paths = ["pixel_rest_src"]
+profile = "black"
+line_length = 90
+lines_after_imports = 2
+
+[tool.flake8]
+max-line-length = 90
+ignore = ['E203', 'E501', 'W503', 'B950']
+max-complexity = 12
+select = ['B', 'C', 'E', 'F', 'W', 'B9']
+per-file-ignores = [
+    # for easier imports to __init__ without __all__
+    '**/__init__.py: F401',
+    # file to define custom types
+    'types.py: F401',
+]
+count = true
 
 [build-system]
 requires = ["poetry-core"]
