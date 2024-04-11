@@ -1,0 +1,23 @@
+train:
+  data_path: data/train
+  crop_size: 88 # training images crop size
+  upscale_factor: 4 # super resolution upscale factor
+  num_epochs: 1 # train epoch number
+  num_workers: 4
+  batch_size: 64
+  shuffle: True
+
+val:
+  data_path: data/val
+  crop_size: 88 # training images crop size
+  upscale_factor: 4 # super resolution upscale factor
+  num_workers: 4
+  batch_size: 1
+  shuffle: False
+  chunk_size: 15
+
+infer:
+  data_path: data/infer
+  crop_size: 88
+  upscale_factor: 4
+  num_epochs: 100

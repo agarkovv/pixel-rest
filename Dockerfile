@@ -70,5 +70,4 @@ COPY . $WORKDIR
 # Create venv and install project dependencies
 RUN cd $WORKDIR \
     && conda create -n $CONDA_ENV python=$PYTHON_VERSION \
-    && poetry lock --no-update \
     && conda run -n $CONDA_ENV poetry install
