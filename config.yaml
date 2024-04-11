@@ -17,7 +17,6 @@ val:
   chunk_size: 15
 
 infer:
-  data_path: data/infer
-  crop_size: 88
   upscale_factor: 4
   num_epochs: 100
+  chunk_size: 15

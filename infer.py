@@ -1,9 +1,10 @@
-import argparse
 import os
 from math import log10
 
+import hydra
 import torch.utils.data
 import torchvision.utils as utils
+from omegaconf import OmegaConf
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -11,38 +12,21 @@ from pixel_rest_src import pytorch_ssim
 from pixel_rest_src.data_utils import ValDatasetFromFolder, display_transform
 
 
-parser = argparse.ArgumentParser(description="Train Super Resolution Models")
-parser.add_argument(
-    "--crop_size", default=88, type=int, help="training images crop size"
-)
-parser.add_argument(
-    "--upscale_factor",
-    default=4,
-    type=int,
-    choices=[2, 4, 8],
-    help="super resolution upscale factor",
-)
-parser.add_argument("--num_epochs", default=100, type=int, help="train epoch number")
-
-
-if __name__ == "__main__":
-    opt = parser.parse_args()
-
-    CROP_SIZE = opt.crop_size
-    UPSCALE_FACTOR = opt.upscale_factor
-    NUM_EPOCH = opt.num_epochs
-
-    inf_set = ValDatasetFromFolder("data/inf", upscale_factor=UPSCALE_FACTOR)
+@hydra.main(config_path="./", config_name="config", version_base="1.3")
+def main(cfg: OmegaConf) -> None:
+    inf_set = ValDatasetFromFolder("data/inf", upscale_factor=cfg.infer.upscale_factor)
     inf_loader = DataLoader(dataset=inf_set, num_workers=4, batch_size=1, shuffle=False)
 
-    netG = torch.load("epochs/netG_epoch_%d_%d.pth" % (UPSCALE_FACTOR, NUM_EPOCH))
+    netG = torch.load(
+        "epochs/netG_epoch_%d_%d.pth" % (cfg.infer.upscale_factor, cfg.infer.num_epochs)
+    )
     print("# generator parameters:", sum(param.numel() for param in netG.parameters()))
 
     if torch.cuda.is_available():
         netG.cuda()
 
     netG.eval()
-    out_path = "training_results/SRF_" + str(UPSCALE_FACTOR) + "/"
+    out_path = "training_results/SRF_" + str(cfg.infer.upscale_factor) + "/"
     if not os.path.exists(out_path):
         os.makedirs(out_path)
 
@@ -90,14 +74,18 @@ if __name__ == "__main__":
                 ]
             )
         inf_images = torch.stack(inf_images)
-        inf_images = torch.chunk(inf_images, inf_images.size(0) // 15)
+        inf_images = torch.chunk(inf_images, inf_images.size(0) // cfg.infer.chunk_size)
         inf_save_bar = tqdm(inf_images, desc="[saving training results]")
         index = 1
         for image in inf_save_bar:
             image = utils.make_grid(image, nrow=3, padding=5)
             utils.save_image(
                 image,
-                out_path + "epoch_%d_index_%d.png" % (NUM_EPOCH, index),
+                out_path + "epoch_%d_index_%d.png" % (cfg.infer.num_epochs, index),
                 padding=5,
             )
             index += 1
+
+
+if __name__ == "__main__":
+    main()
