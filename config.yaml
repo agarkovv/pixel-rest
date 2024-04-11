@@ -17,6 +17,10 @@ val:
   chunk_size: 15
 
 infer:
-  upscale_factor: 4
-  num_epochs: 100
+  data_path: data/inf
+  crop_size: 88 # training images crop size
+  upscale_factor: 4 # super resolution upscale factor
+  num_workers: 4
+  batch_size: 1
+  shuffle: False
   chunk_size: 15

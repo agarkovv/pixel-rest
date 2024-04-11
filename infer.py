@@ -14,8 +14,15 @@ from pixel_rest_src.data_utils import ValDatasetFromFolder, display_transform
 
 @hydra.main(config_path="./", config_name="config", version_base="1.3")
 def main(cfg: OmegaConf) -> None:
-    inf_set = ValDatasetFromFolder("data/inf", upscale_factor=cfg.infer.upscale_factor)
-    inf_loader = DataLoader(dataset=inf_set, num_workers=4, batch_size=1, shuffle=False)
+    inf_set = ValDatasetFromFolder(
+        cfg.infer.data_path, upscale_factor=cfg.infer.upscale_factor
+    )
+    inf_loader = DataLoader(
+        dataset=inf_set,
+        num_workers=cfg.infer.num_workers,
+        batch_size=cfg.infer.batch_size,
+        shuffle=cfg.infer.shuffle,
+    )
 
     netG = torch.load(
         "epochs/netG_epoch_%d_%d.pth" % (cfg.infer.upscale_factor, cfg.infer.num_epochs)
