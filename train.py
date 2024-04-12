@@ -47,9 +47,23 @@ def main(cfg: OmegaConf) -> None:
         shuffle=cfg.val.shuffle,
     )
 
-    netG = Generator(cfg.train.upscale_factor)
+    netG = Generator(
+        cfg.model.generator.out_channels,
+        cfg.model.generator.scale_factor,
+        cfg.model.generator.block1.kernel_size,
+        cfg.model.generator.block1.padding,
+        cfg.model.generator.block7.kernel_size,
+        cfg.model.generator.block7.padding,
+        cfg.model.generator.block8.kernel_size,
+        cfg.model.generator.block8.padding,
+    )
     print("# generator parameters:", sum(param.numel() for param in netG.parameters()))
-    netD = Discriminator()
+    netD = Discriminator(
+        cfg.model.generator.out_channels,
+        cfg.model.discriminator.kernel_size,
+        cfg.model.discriminator.padding,
+        cfg.model.discriminator.leaky_coef,
+    )
     print(
         "# discriminator parameters:", sum(param.numel() for param in netD.parameters())
     )

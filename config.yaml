@@ -1,3 +1,26 @@
+model:
+  generator:
+    scale_factor: 2
+    out_channels: 64
+    block1:
+      kernel_size: 9
+      padding: 4
+    block7:
+      kernel_size: 3
+      padding: 1
+    block8:
+      kernel_size: 9
+      padding: 4
+    upsample_block:
+      kernel_size: 3
+      padding: 1
+
+  descriminator:
+    out_channels: 64
+    kernel_size: 3
+    padding: 1
+    leaky_coef: 0.2
+
 train:
   data_path: data/train
   crop_size: 88 # training images crop size
