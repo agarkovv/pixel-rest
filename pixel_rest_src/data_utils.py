@@ -49,7 +49,7 @@ def display_transform():
 
 class TrainDatasetFromFolder(Dataset):
     def __init__(self, dataset_dir, crop_size, upscale_factor):
-        super(TrainDatasetFromFolder, self).__init__()
+        super().__init__()
         self.image_filenames = [
             join(dataset_dir, x) for x in listdir(dataset_dir) if is_image_file(x)
         ]
@@ -68,7 +68,7 @@ class TrainDatasetFromFolder(Dataset):
 
 class ValDatasetFromFolder(Dataset):
     def __init__(self, dataset_dir, upscale_factor):
-        super(ValDatasetFromFolder, self).__init__()
+        super().__init__()
         self.upscale_factor = upscale_factor
         self.image_filenames = [
             join(dataset_dir, x) for x in listdir(dataset_dir) if is_image_file(x)

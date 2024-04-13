@@ -23,7 +23,11 @@ from pixel_rest_src.model import Discriminator, Generator
 
 @hydra.main(config_path="./", config_name="config", version_base="1.3")
 def main(cfg: OmegaConf) -> None:
-    text = f"Training model with the following config:\n{cfg}"
+    text = (
+        "==========================================\n"
+        f"Training model with the following config:\n{cfg}\n"
+        "=========================================="
+    )
     print(text)
 
     train_set = TrainDatasetFromFolder(
