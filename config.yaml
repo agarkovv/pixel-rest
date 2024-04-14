@@ -21,6 +21,12 @@ model:
     padding: 1
     leaky_coef: 0.2
 
+  loss:
+    generator:
+      adversarial_weight: 0.001
+      perception_weight: 0.006
+      tv_weight: 2.e-8
+
 train:
   data_path: data/train
   crop_size: 88 # training images crop size

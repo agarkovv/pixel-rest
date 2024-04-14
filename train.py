@@ -72,7 +72,11 @@ def main(cfg: OmegaConf) -> None:
         "# discriminator parameters:", sum(param.numel() for param in netD.parameters())
     )
 
-    generator_criterion = GeneratorLoss()
+    generator_criterion = GeneratorLoss(
+        cfg.loss.generator.adversarial_weight,
+        cfg.loss.generator.perception_weight,
+        cfg.loss.generator.tv_weight,
+    )
 
     if torch.cuda.is_available():
         netG.cuda()
