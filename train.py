@@ -53,7 +53,7 @@ def main(cfg: OmegaConf) -> None:
 
     netG = Generator(
         cfg.model.generator.out_channels,
-        cfg.model.generator.scale_factor,
+        cfg.train.upscale_factor,
         cfg.model.generator.block1.kernel_size,
         cfg.model.generator.block1.padding,
         cfg.model.generator.block7.kernel_size,
@@ -73,9 +73,9 @@ def main(cfg: OmegaConf) -> None:
     )
 
     generator_criterion = GeneratorLoss(
-        cfg.loss.generator.adversarial_weight,
-        cfg.loss.generator.perception_weight,
-        cfg.loss.generator.tv_weight,
+        cfg.model.loss.generator.adversarial_weight,
+        cfg.model.loss.generator.perception_weight,
+        cfg.model.loss.generator.tv_weight,
     )
 
     if torch.cuda.is_available():

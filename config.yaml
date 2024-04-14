@@ -1,6 +1,5 @@
 model:
   generator:
-    scale_factor: 2
     out_channels: 64
     block1:
       kernel_size: 9
@@ -15,7 +14,7 @@ model:
       kernel_size: 3
       padding: 1
 
-  descriminator:
+  discriminator:
     out_channels: 64
     kernel_size: 3
     padding: 1
@@ -43,7 +42,7 @@ val:
   num_workers: 4
   batch_size: 1
   shuffle: False
-  chunk_size: 15
+  chunk_size: 1
 
 infer:
   data_path: data/inf
