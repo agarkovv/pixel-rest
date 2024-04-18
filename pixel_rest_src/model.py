@@ -2,6 +2,7 @@ import math
 
 import lightning as L
 import torch
+import torch.optim as optim
 from omegaconf import OmegaConf
 from torch import nn
 
@@ -237,3 +238,8 @@ class SRGANModel(L.LightningModule):
         self.log("d_loss", d_loss.item(), on_step=True, on_epoch=False, prog_bar=True)
 
         return {"g_loss": g_loss, "d_loss": d_loss}
+
+    def configure_optimizers(self):
+        optimizerG = optim.Adam(self.netG.parameters())
+        optimizerD = optim.Adam(self.netD.parameters())
+        return optimizerG, optimizerD
