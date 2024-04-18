@@ -126,23 +126,21 @@ def main(cfg: OmegaConf) -> None:
             real_out = netD(real_img).mean()
             fake_out = netD(fake_img).mean()
             d_loss = 1 - real_out + fake_out
-            d_loss.backward(retain_graph=True)
+            d_loss.backward()
             optimizerD.step()
 
             ############################
             # (2) Update G network: minimize 1-D(G(z)) + Perception Loss + Image Loss + TV Loss
             ###########################
             netG.zero_grad()
-            # The two lines below are added to prevent runetime error in Google Colab ##
+            # The two lines below are added to prevent runtime error in Google Colab ##
             fake_img = netG(z)
             fake_out = netD(fake_img).mean()
 
             g_loss = generator_criterion(fake_out, fake_img, real_img)
             g_loss.backward()
-
             fake_img = netG(z)
             fake_out = netD(fake_img).mean()
-
             optimizerG.step()
 
             # loss for current batch before optimization

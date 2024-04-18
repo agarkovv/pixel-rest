@@ -9,6 +9,11 @@ __pycache__/
 # Datasets
 data/
 
+# Logging
+training_results/
+epochs/
+outputs/
+
 # VS-Code
 .DS_Store
 .vscode
