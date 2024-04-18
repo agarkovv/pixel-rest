@@ -1,7 +1,11 @@
 import math
 
+import lightning as L
 import torch
+from omegaconf import OmegaConf
 from torch import nn
+
+from pixel_rest_src.loss import GeneratorLoss
 
 
 class Generator(nn.Module):
@@ -171,3 +175,65 @@ class UpsampleBLock(nn.Module):
         x = self.pixel_shuffle(x)
         x = self.prelu(x)
         return x
+
+
+class SRGANModel(L.LightningModule):
+    def __init__(self, cfg: OmegaConf):
+        super().__init__()
+        self.automatic_optimization = False  # to control optimizers manually
+        self.save_hyperparameters()
+        self.cfg = cfg
+        self.netG = Generator(
+            cfg.model.generator.out_channels,
+            cfg.train.upscale_factor,
+            cfg.model.generator.block1.kernel_size,
+            cfg.model.generator.block1.padding,
+            cfg.model.generator.block7.kernel_size,
+            cfg.model.generator.block7.padding,
+            cfg.model.generator.block8.kernel_size,
+            cfg.model.generator.block8.padding,
+        )
+        self.netD = Discriminator(
+            cfg.model.generator.out_channels,
+            cfg.model.discriminator.kernel_size,
+            cfg.model.discriminator.padding,
+            cfg.model.discriminator.leaky_coef,
+        )
+        self.generator_criterion = GeneratorLoss(
+            cfg.model.loss.generator.adversarial_weight,
+            cfg.model.loss.generator.perception_weight,
+            cfg.model.loss.generator.tv_weight,
+        )
+
+    def forward(self, batch):
+        return self.netG(batch)
+
+    def training_step(self, batch, batch_idx):
+        optimizerG, optimizerD = self.optimizers()
+        data, real_img = batch
+        fake_img = self.netG(data)
+
+        ############################
+        # (1) Update D network: maximize D(x)-1-D(G(z))
+        ###########################
+        self.netD.zero_grad()
+        real_out = self.netD(real_img).mean()
+        fake_out = self.netD(fake_img).mean()
+        d_loss = 1 - real_out + fake_out
+        d_loss.backward()
+        optimizerD.step()
+
+        ############################
+        # (2) Update G network: minimize 1-D(G(z)) + Perception Loss + Image Loss + TV Loss
+        ###########################
+        self.netG.zero_grad()
+        fake_img = self.netG(data)
+        fake_out = self.netD(fake_img).mean()
+        g_loss = self.generator_criterion(fake_out, fake_img, real_img)
+        g_loss.backward()
+        optimizerG.step()
+
+        self.log("g_loss", g_loss.item(), on_step=True, on_epoch=False, prog_bar=True)
+        self.log("d_loss", d_loss.item(), on_step=True, on_epoch=False, prog_bar=True)
+
+        return {"g_loss": g_loss, "d_loss": d_loss}
