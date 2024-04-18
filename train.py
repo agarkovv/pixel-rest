@@ -36,7 +36,7 @@ def main(cfg: OmegaConf) -> None:
         upscale_factor=cfg.train.upscale_factor,
     )
     val_set = ValDatasetFromFolder(
-        cfg.val.data_path, upscale_factor=cfg.val.upscale_factor
+        cfg.val.data_path, upscale_factor=cfg.train_upscale_factor
     )
     train_loader = DataLoader(
         dataset=train_set,
@@ -46,7 +46,7 @@ def main(cfg: OmegaConf) -> None:
     )
     val_loader = DataLoader(
         dataset=val_set,
-        num_workers=cfg.val.num_workers,
+        num_workers=cfg.train.num_workers,
         batch_size=cfg.val.batch_size,
         shuffle=cfg.val.shuffle,
     )
@@ -162,7 +162,7 @@ def main(cfg: OmegaConf) -> None:
             )
 
         netG.eval()
-        out_path = "training_results/SRF_" + str(cfg.val.upscale_factor) + "/"
+        out_path = "training_results/SRF_" + str(cfg.train_upscale_factor) + "/"
         if not os.path.exists(out_path):
             os.makedirs(out_path)
 
@@ -227,11 +227,11 @@ def main(cfg: OmegaConf) -> None:
         # save model parameters
         torch.save(
             netG.state_dict(),
-            "epochs/netG_epoch_%d_%d.pth" % (cfg.val.upscale_factor, epoch),
+            "epochs/netG_epoch_%d_%d.pth" % (cfg.train_upscale_factor, epoch),
         )
         torch.save(
             netD.state_dict(),
-            "epochs/netD_epoch_%d_%d.pth" % (cfg.val.upscale_factor, epoch),
+            "epochs/netD_epoch_%d_%d.pth" % (cfg.train_upscale_factor, epoch),
         )
         # save loss\scores\psnr\ssim
         results["d_loss"].append(
@@ -263,7 +263,10 @@ def main(cfg: OmegaConf) -> None:
                 index=range(1, epoch + 1),
             )
             data_frame.to_csv(
-                out_path + "srf_" + str(cfg.val.upscale_factor) + "_train_results.csv",
+                out_path
+                + "srf_"
+                + str(cfg.train_upscale_factor)
+                + "_train_results.csv",
                 index_label="Epoch",
             )
 

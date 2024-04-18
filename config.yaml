@@ -37,8 +37,6 @@ train:
 
 val:
   data_path: data/val
-  crop_size: 88 # training images crop size
-  upscale_factor: 4 # super resolution upscale factor
   num_workers: 4
   batch_size: 1
   shuffle: False
@@ -46,8 +44,6 @@ val:
 
 infer:
   data_path: data/inf
-  crop_size: 88 # training images crop size
-  upscale_factor: 4 # super resolution upscale factor
   num_workers: 4
   batch_size: 1
   shuffle: False
