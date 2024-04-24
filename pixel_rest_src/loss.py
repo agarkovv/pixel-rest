@@ -4,10 +4,15 @@ from torchvision.models.vgg import vgg16
 
 
 class GeneratorLoss(nn.Module):
-    def __init__(self):
-        super(GeneratorLoss, self).__init__()
+    def __init__(self, adv_w=0.001, perc_w=0.006, tv_w=2e-8):
+        super().__init__()
+        self.adv_w = adv_w
+        self.perc_w = perc_w
+        self.tv_w = tv_w
         vgg = vgg16(pretrained=True)
-        loss_network = nn.Sequential(*list(vgg.features)[:31]).eval()
+        # legacy
+        # loss_network = nn.Sequential(*list(vgg.features)[:31]).eval()
+        loss_network = nn.Sequential(*list(vgg.features)).eval()
         for param in loss_network.parameters():
             param.requires_grad = False
         self.loss_network = loss_network
@@ -26,16 +31,16 @@ class GeneratorLoss(nn.Module):
         # TV Loss
         tv_loss = self.tv_loss(out_images)
         return (
-            image_loss
-            + 0.001 * adversarial_loss
-            + 0.006 * perception_loss
-            + 2e-8 * tv_loss
+            image_loss  # mse component
+            + self.adv_w * adversarial_loss  # adversarial component for generator
+            + self.perc_w * perception_loss  # perception component using vgg output
+            + self.tv_w * tv_loss  # total variation component for regularization
         )
 
 
 class TVLoss(nn.Module):
     def __init__(self, tv_loss_weight=1):
-        super(TVLoss, self).__init__()
+        super().__init__()
         self.tv_loss_weight = tv_loss_weight
 
     def forward(self, x):

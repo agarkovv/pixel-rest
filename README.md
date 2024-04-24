@@ -1,85 +1,81 @@
 # MLOps Pixel Recursive Super Resolution
 
-## Структура проекта:
+## Project Structure:
 
 <img src="pics/struct.png" width="200" height="300"/>
 
-- Директория epochs содержит чекпоинты модели
-- Директория pixel_rest_src содержит source файлы
-- Директория statistics хранит графики метрик после тренировки модели
-- Зависимости описаны в pyproject.toml
+- The epochs directory contains the model checkpoints
+- The pixel_rest_src directory contains source files
+- The statistics directory stores graphs of metrics after model training.
+- Dependencies are described in pyproject.toml
 
-1. ## Формулировка задачи:
+## 1. Problem Statement:
 
-- ### Цель проекта:
+- ### Project Objective:
 
-Хотим разработать модель глубокого пиксельного восстановления для улучшения
-качества изображений (см. папир
+We want to develop a deep pixel restoration model to improve the image quality
+(see papyr.
 [https://arxiv.org/pdf/1702.00783.pdf](https://arxiv.org/pdf/1702.00783.pdf))
 
-- ### Зачем это нужно:
+- ### Why it is needed:
 
-  1. Это фаново. Пользователь может загрузить картинку, а на выходе получить
-     что-то лучшее. Или дать набросок некоторой картинки и получить
-     дорисованную.
-  2. Это позволяет восстанавливать недостающую информацию или даже
-     расшифровывать свитки
+  1. It's fanout. A user can upload an image and the output is something better.
+     Or give a sketch of a certain picture and get a a finalized one.
+  2. It allows you to reconstruct missing information or even decipher scrolls
      ([https://www.bloomberg.com/features/2024-ai-unlock-ancient-world-secrets/](https://www.bloomberg.com/features/2024-ai-unlock-ancient-world-secrets/))
 
-2. ## Данные:
+## 2. Data:
 
-- ### Источники данных:
+- ### Data sources:
 
-Набор данных DIV2K (https://data.vision.ee.ethz.ch/cvl/DIV2K/), который содержит
-высококачественные изображения различного разрешения. Этот датасет был
-использован в исходной статье Pixel Recursive Super Resolution, но можно и взять
-другие датасеты из хранилища гугла.
+DIV2K dataset (https://data.vision.ee.ethz.ch/cvl/DIV2K/), which contains high
+quality images of various resolutions. This dataset was used in the original
+Pixel Recursive Super Resolution article, but you can also use other datasets
+from the google repository. other datasets from the google repository.
 
-- ### Особенности данных:
+- #### Data Features:
 
-800 изображений для тренировки и 100 изображений для тестирования. Разные
-домены.
+800 images for training and 100 images for testing. Different domains.
 
 ![face.png](pics/face.png)
 
-- ### Возможные проблемы:
+- #### Possible problems:
 
-  1. Недостаточное количество данных для обучения модели. (Можно найти другие
-     датасеты для других доменов).
-  2. Также, возможны проблемы с различиями в освещении, шуме, каких-то других
-     артефактах на изображениях.
+  1. Not enough data to train the model. (It is possible to find other datasets
+     for other domains).
+  2. Also, there may be problems with differences in lighting, noise, some other
+     artifacts in the images.
 
-3. ## Подход к моделированию:
+## 3. Modeling approach:
 
-- ### Модели и библиотеки:
+- ### Models and libraries:
 
-SRGAN (Super-Resolution Generative Adversarial Network) или EDSR (Enhanced Deep
+SRGAN (Super-Resolution Generative Adversarial Network) or EDSR (Enhanced Deep
 Super-Resolution).
 
-- ### Конфигурация решения:
+- ### Solution Configuration:
 
-Модель будет обучаться на тренировочном наборе данных DIV2K. Модель будет иметь
-сверточную архитектуру с несколькими слоями и использовать функцию потерь, такую
-как среднеквадратическая ошибка (MSE) или перцептивная потеря (perceptual loss)
-для обучения.
+The model will be trained on the DIV2K training dataset. The model will have a
+convolutional architecture with multiple layers and will utilize a loss function
+such such as mean square error (MSE) or perceptual loss (perceptual loss) for
+training.
 
-4. ## Способ предсказания:
+## 4. Prediction method:
 
-- ### Обертывание модели в продакшен пайплайн:
+- ### Wrapping the model in the production pipeline:
 
-После обучения модели, ее можно будет интегрировать в продакшен пайплайн.
+Once the model is trained, it can be integrated into the production pipeline.
 
-Пайплайн планируется следующий:
+The payline is planned as follows:
 
-    1. Загрузка изображений
-    2. Предварительная обработка (например, изменение размера изображений)
-    3. Инференс модели глубокого пиксельного восстановления и сохранение улучшенных изображений.
+    1. Uploading images
+    2. Pre-processing (e.g. resizing images)
+    3. Inferring the deep pixel restoration model and saving the improved images.
 
 ![nn.png](pics/nn.png)
 
-- ### Финальное применение:
+- #### Final Application:
 
-Финальным применением модели может быть улучшение качества изображений в
-реальном времени. Например, можно восстанавливать лица людей в реальном времени
-или сделать залипательный сервис по бесконечно глубокому восстановлению
-фотографии.
+The final application of the model can be to improve the quality of images in
+real time. For example, one could reconstruct people's faces in real time or
+make a sticky service to infinitely deep reconstruct a photos.
