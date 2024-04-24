@@ -36,7 +36,7 @@ def main(cfg: OmegaConf) -> None:
         upscale_factor=cfg.train.upscale_factor,
     )
     val_set = ValDatasetFromFolder(
-        cfg.val.data_path, upscale_factor=cfg.train_upscale_factor
+        cfg.val.data_path, upscale_factor=cfg.model.upscale_factor
     )
     train_loader = DataLoader(
         dataset=train_set,

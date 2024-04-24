@@ -1,4 +1,6 @@
 model:
+  upscale_factor: 4 # super resolution upscale factor
+
   generator:
     out_channels: 64
     block1:
@@ -29,7 +31,6 @@ model:
 train:
   data_path: data/train
   crop_size: 88 # training images crop size
-  upscale_factor: 4 # super resolution upscale factor
   num_epochs: 1 # train epoch number
   num_workers: 4
   batch_size: 64
