@@ -1,0 +1,10 @@
+services:
+  mlflow:
+    image: mlflow_server
+    container_name: ghcr.io/mlflow/mlflow:v2.0.1
+    ports:
+      - "5000:5000"
+  model:
+    build: .
+    container_name: pixel-rest
+    ports: "9000:9000"
