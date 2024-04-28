@@ -13,6 +13,7 @@ data/
 training_results/
 epochs/
 outputs/
+mlruns
 
 # VS-Code
 .DS_Store
