@@ -35,7 +35,9 @@ def main(cfg: OmegaConf) -> None:
 
     model = SRGANModel(cfg=cfg)
 
-    mlf_logger = MLFlowLogger(experiment_name="SRGAN_logs")
+    mlf_logger = MLFlowLogger(
+        experiment_name="SRGAN_logs", tracking_uri="0.0.0.0:5001"
+    )  # from docker-compose config
 
     callbacks = [
         pl.callbacks.LearningRateMonitor(logging_interval="step"),
