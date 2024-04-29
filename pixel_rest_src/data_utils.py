@@ -2,7 +2,7 @@ from os import listdir
 from os.path import join
 
 import lightning as L
-from lightning.pytorch.utilities.types import TRAIN_DATALOADERS
+from lightning.pytorch.utilities.types import EVAL_DATALOADERS, TRAIN_DATALOADERS
 from PIL import Image
 from torch.utils.data.dataloader import DataLoader
 from torch.utils.data.dataset import Dataset
@@ -191,7 +191,7 @@ class SRGANDataModule(L.LightningDataModule):
             shuffle=self.train_shuffle,
         )
 
-    def val_dataloader(self) -> TRAIN_DATALOADERS:
+    def val_dataloader(self) -> EVAL_DATALOADERS:
         return DataLoader(
             dataset=self.val_dataset,
             num_workers=self.num_workers,
@@ -199,6 +199,6 @@ class SRGANDataModule(L.LightningDataModule):
             shuffle=self.val_shuffle,
         )
 
-    def test_dataloader(self) -> TRAIN_DATALOADERS:
+    def test_dataloader(self) -> EVAL_DATALOADERS:
         # TODO: implement test dataloader
         return super().test_dataloader()

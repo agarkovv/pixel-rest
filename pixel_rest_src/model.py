@@ -186,7 +186,7 @@ class SRGANModel(L.LightningModule):
         self.cfg = cfg
         self.netG = Generator(
             cfg.model.generator.out_channels,
-            cfg.train.upscale_factor,
+            cfg.model.upscale_factor,
             cfg.model.generator.block1.kernel_size,
             cfg.model.generator.block1.padding,
             cfg.model.generator.block7.kernel_size,
@@ -209,7 +209,7 @@ class SRGANModel(L.LightningModule):
     def forward(self, batch):
         return self.netG(batch)
 
-    def training_step(self, batch, batch_idx):
+    def training_step(self, batch, batch_idx=None):
         optimizerG, optimizerD = self.optimizers()
         data, real_img = batch
         fake_img = self.netG(data)
