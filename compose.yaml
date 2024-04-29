@@ -10,3 +10,5 @@ services:
     container_name: pixel-rest
     ports:
       - "9001:9001"
+    tty: True
+    entrypoint: "/bin/bash"
