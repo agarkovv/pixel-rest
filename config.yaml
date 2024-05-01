@@ -28,8 +28,11 @@ model:
       perception_weight: 0.006
       tv_weight: 2.e-8
 
+data:
+  gdrive_url: https://drive.google.com/uc?id=11BbrLV5lZjfreMJS-6JsBt8RDDuwvAAN
+  out_dir: data
+
 train:
-  data_path: data/train
   crop_size: 88 # training images crop size
   num_epochs: 1 # train epoch number
   num_workers: 4
@@ -37,14 +40,12 @@ train:
   shuffle: True
 
 val:
-  data_path: data/val
   num_workers: 4
   batch_size: 1
   shuffle: False
   chunk_size: 1
 
 infer:
-  data_path: data/inf
   num_workers: 4
   batch_size: 1
   shuffle: False
