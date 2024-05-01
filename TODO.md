@@ -1,3 +1,3 @@
-- data_utils: add downloading data from s3 or gdrive
 - data_utils: add test_dataset
 - data_utils: implement test dataloader
+- infer.py: update to lightning pipeline
