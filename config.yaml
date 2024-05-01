@@ -36,7 +36,7 @@ train:
   crop_size: 88 # training images crop size
   num_epochs: 1 # train epoch number
   num_workers: 4
-  batch_size: 64
+  batch_size: 1
   shuffle: True
 
 val:
