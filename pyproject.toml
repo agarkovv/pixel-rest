@@ -21,6 +21,8 @@ lightning = "^2.2.2"
 mlflow = "^2.12.1"
 rich = "^13.7.1"
 psutil = "^5.9.8"
+gdown = "^5.1.0"
+pathlib = "^1.0.1"
 
 [tool.isort]
 src_paths = ["pixel_rest_src"]

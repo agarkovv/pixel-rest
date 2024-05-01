@@ -19,9 +19,8 @@ def main(cfg: OmegaConf) -> None:
     print(text)
 
     data_module = SRGANDataModule(
-        train_dataset_dir=cfg.train.data_path,
-        val_dataset_dir=cfg.val.data_path,
-        test_dataset_dir=None,
+        gdrive_url=cfg.data.gdrive_url,
+        out_dir=cfg.data.out_dir,
         train_shuffle=cfg.train.shuffle,
         val_shuffle=cfg.val.shuffle,
         test_shuffle=None,

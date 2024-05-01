@@ -1,6 +1,9 @@
+import zipfile
 from os import listdir
 from os.path import join
+from pathlib import Path
 
+import gdown
 import lightning as L
 from lightning.pytorch.utilities.types import EVAL_DATALOADERS, TRAIN_DATALOADERS
 from PIL import Image
@@ -129,10 +132,9 @@ class TestDatasetFromFolder(Dataset):
 class SRGANDataModule(L.LightningDataModule):
     def __init__(
         self,
-        # dir paths
-        train_dataset_dir,
-        val_dataset_dir,
-        test_dataset_dir,
+        # cloud path
+        gdrive_url,
+        out_dir,
         # bool shuffle data or not
         train_shuffle,
         val_shuffle,
@@ -147,10 +149,9 @@ class SRGANDataModule(L.LightningDataModule):
     ):
         super().__init__()
         self.save_hyperparameters()
-        # dir paths
-        self.train_dataset_dir = train_dataset_dir
-        self.val_dataset_dir = val_dataset_dir
-        self.test_dataset_dir = test_dataset_dir
+        # cloud path
+        self.gdrive_url = gdrive_url
+        self.out_dir = out_dir
 
         # bool shuffle data or not
         self.train_shuffle = train_shuffle
@@ -168,17 +169,19 @@ class SRGANDataModule(L.LightningDataModule):
         self.upscale_factor = upscale_factor
 
     def prepare_data(self) -> None:
-        # TODO: add downloading data from gdrive / s3
-        pass
+        tmp = gdown.download(self.gdrive_url)
+        with zipfile.ZipFile(tmp, "r") as zip_ref:
+            zip_ref.extractall(self.out_dir)
 
     def setup(self, stage: str) -> None:
         self.train_dataset = TrainDatasetFromFolder(
-            dataset_dir=self.train_dataset_dir,
+            # dataset_dir=self.train_dataset_dir,
+            dataset_dir=Path(self.out_dir) / "train",
             crop_size=self.crop_size,
             upscale_factor=self.upscale_factor,
         )
         self.val_dataset = ValDatasetFromFolder(
-            dataset_dir=self.val_dataset_dir, upscale_factor=self.upscale_factor
+            dataset_dir=Path(self.out_dir) / "val", upscale_factor=self.upscale_factor
         )
         # TODO: add test_dataset
         # self.test_dataset = ...
